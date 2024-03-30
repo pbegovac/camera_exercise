@@ -1,14 +1,14 @@
-import React from 'react';
-import { OrbitControls, Html, useGLTF } from '@react-three/drei';
-import { Perf } from 'r3f-perf';
-import { Suspense } from 'react';
-import { foxDescriptions } from './utils';
-import { useFrame } from '@react-three/fiber';
-import * as THREE from 'three';
-import type { GLTF, OrbitControls as OrbitControlsImpl } from 'three-stdlib';
+import React from "react";
+import { OrbitControls, Html, useGLTF } from "@react-three/drei";
+import { Perf } from "r3f-perf";
+import { Suspense } from "react";
+import { foxDescriptions } from "./utils";
+import { useFrame } from "@react-three/fiber";
+import * as THREE from "three";
+import type { GLTF, OrbitControls as OrbitControlsImpl } from "three-stdlib";
 
-import { useState, useRef } from 'react';
-import { sceneButtonsArray } from './utils';
+import { useState, useRef } from "react";
+import { sceneButtonsArray } from "./utils";
 
 interface GLTFModel extends GLTF {
   position?: THREE.Vector3;
@@ -20,13 +20,13 @@ export default function Scene() {
   );
 
   const [sceneButton, setSceneButton] = useState<number>(0);
-  const animalName = 'fox';
-  const modelNameButtons = animalName + 'Buttons';
+  const animalName = "fox";
+  const modelNameButtons = animalName + "Buttons";
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
 
   const objectRef = useRef<GLTFModel | null>(null);
 
-  let buttonName = '';
+  let buttonName = "";
   const objectButtons = sceneButtonsArray.find((buttonsObj) => {
     const [key] = Object.keys(buttonsObj);
     return key === modelNameButtons;
@@ -36,7 +36,7 @@ export default function Scene() {
     buttonName = Object.keys(objectButtons)[0];
   }
 
-  const fox = useGLTF('./Fox/glTF/Fox.gltf');
+  const fox = useGLTF("./Fox/glTF/Fox.gltf");
 
   const handleClick = (index: number) => {
     if (objectButtons) {
@@ -108,7 +108,7 @@ export default function Scene() {
 
   return (
     <>
-      <Perf position='top-left' />
+      <Perf position="top-left" />
 
       <OrbitControls makeDefault ref={controlsRef} />
 
@@ -120,8 +120,8 @@ export default function Scene() {
       />
       <ambientLight intensity={1.5} />
 
-      <Html center className='wrapper'>
-        <div className='descriptions'>{modalTitle}</div>
+      <Html center className="wrapper">
+        <div className="descriptions">{modalTitle}</div>
       </Html>
 
       {foxDescriptions.map((_item, index) => (
@@ -129,7 +129,7 @@ export default function Scene() {
           distanceFactor={6}
           center
           key={index}
-          className='wrapper'
+          className="wrapper"
           position={
             objectButtons &&
             (objectButtons[buttonName][index] as [number, number, number])
