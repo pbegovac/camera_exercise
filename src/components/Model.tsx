@@ -1,73 +1,29 @@
-import React from "react";
 import { OrbitControls, Html, useGLTF } from "@react-three/drei";
-import { Perf } from "r3f-perf";
-import { Suspense } from "react";
-import { foxDescriptions } from "./utils";
+import { suzanneDescriptions } from "./utils";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import type { GLTF, OrbitControls as OrbitControlsImpl } from "three-stdlib";
-
-import { useState, useRef } from "react";
-import { sceneButtonsArray } from "./utils";
+import { useStateContext } from "../store/context";
+import React, { useState, useRef, Suspense } from "react";
+import { NumberButton } from "./style";
 
 interface GLTFModel extends GLTF {
   position?: THREE.Vector3;
 }
 
-export default function Scene() {
-  const [storedPosition, setStoredPosition] = useState<THREE.Vector3 | null>(
-    null
-  );
+const Model = () => {
+  const { storedPosition, setStoredPosition, handleClick, objectButtons } =
+    useStateContext();
 
-  const [sceneButton, setSceneButton] = useState<number>(0);
-  const animalName = "fox";
-  const modelNameButtons = animalName + "Buttons";
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
-
   const objectRef = useRef<GLTFModel | null>(null);
+  const fox = useGLTF("./Suzanne/glTF/Suzanne.gltf");
 
   let buttonName = "";
-  const objectButtons = sceneButtonsArray.find((buttonsObj) => {
-    const [key] = Object.keys(buttonsObj);
-    return key === modelNameButtons;
-  });
 
   if (objectButtons) {
     buttonName = Object.keys(objectButtons)[0];
   }
-
-  const fox = useGLTF("./Fox/glTF/Fox.gltf");
-
-  const handleClick = (index: number) => {
-    if (objectButtons) {
-      const position = objectButtons[buttonName][index];
-      const newPosition = {
-        x: position[0],
-        y: position[1],
-        z: position[2],
-      };
-
-      setStoredPosition(newPosition as THREE.Vector3);
-
-      if (controlsRef.current) {
-        controlsRef.current.enabled = false;
-      }
-      setSceneButton(index + 1);
-
-      console.log(position);
-      console.log(index + 1);
-    }
-  };
-
-  console.log(foxDescriptions);
-  const modalTitle = foxDescriptions.map((item) => {
-    return (
-      <div key={item[sceneButton]}>
-        <h2>{item[sceneButton]}</h2>
-        <p>{item[sceneButton + 1]}</p>
-      </div>
-    );
-  });
 
   const [smoothedCameraPosition] = useState(() => new THREE.Vector3());
   const [smoothedCameraTarget] = useState(() => new THREE.Vector3());
@@ -79,11 +35,9 @@ export default function Scene() {
       const cameraPosition = new THREE.Vector3();
       cameraPosition.copy(storedPosition);
 
-      console.log(cameraPosition);
-
-      // cameraPosition.x < 0
-      //   ? (cameraPosition.x += 0.02)
-      //   : (cameraPosition.x -= 0.02);
+      cameraPosition.x < 0
+        ? (cameraPosition.x += 0.02)
+        : (cameraPosition.x -= 0.02);
 
       if (smoothedCameraPosition) {
         smoothedCameraPosition.lerp(cameraPosition, 3 * delta);
@@ -108,8 +62,6 @@ export default function Scene() {
 
   return (
     <>
-      <Perf position="top-left" />
-
       <OrbitControls makeDefault ref={controlsRef} />
 
       <directionalLight
@@ -120,11 +72,7 @@ export default function Scene() {
       />
       <ambientLight intensity={1.5} />
 
-      <Html center className="wrapper">
-        <div className="descriptions">{modalTitle}</div>
-      </Html>
-
-      {foxDescriptions.map((_item, index) => (
+      {suzanneDescriptions.map((_item, index) => (
         <Html
           distanceFactor={6}
           center
@@ -135,8 +83,9 @@ export default function Scene() {
             (objectButtons[buttonName][index] as [number, number, number])
           }
         >
-          {/* <div className='descriptions'>{modalTitle}</div> */}
-          <button onClick={() => handleClick(index)}>{`${index + 1}`}</button>
+          <NumberButton onClick={() => handleClick(index)}>{`${
+            index + 1
+          }`}</NumberButton>
         </Html>
       ))}
 
@@ -144,12 +93,12 @@ export default function Scene() {
         <primitive
           ref={objectRef}
           object={fox.scene}
-          scale={0.02}
-          position={[0, -1, 0]}
+          scale={0.5}
+          position={[0, 0, 0]}
         />
       </Suspense>
-
-      <Html></Html>
     </>
   );
-}
+};
+
+export default Model;

@@ -1,17 +1,15 @@
 import ReactDOM from "react-dom/client";
-import { Canvas } from "@react-three/fiber";
-import Scene from "./Scene.jsx";
-import { TextSection, ModelSection } from "./style.tsx";
 import React from "react";
+import "./style.css";
+import { ContextProvider } from "./store/context";
+import ModelSection from "./components/ModelSection";
+import TextSection from "./components/TextSection";
 
 const root = ReactDOM.createRoot(document.querySelector("#root"));
 
 root.render(
-  <>
+  <ContextProvider>
     <ModelSection />
-    <Canvas shadows>
-      <Scene />
-    </Canvas>
     <TextSection />
-  </>
+  </ContextProvider>
 );
