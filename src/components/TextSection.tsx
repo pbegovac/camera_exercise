@@ -20,8 +20,12 @@ const TextSection = () => {
       <Title>{currentDescription[0]}</Title>
       <Description>{currentDescription[1]}</Description>
       <CursorWrapper>
-        <CursorButtonLeft onClick={() => handleClick(buttonValue - 1)} />
-        <CursorButtonRight onClick={() => handleClick(buttonValue + 1)} />
+        <CursorButtonLeft onClick={() => handleClick(buttonValue - 1)}>
+          &lt;
+        </CursorButtonLeft>
+        <CursorButtonRight onClick={() => handleClick(buttonValue + 1)}>
+          &gt;
+        </CursorButtonRight>
       </CursorWrapper>
     </TextWrapper>
   );

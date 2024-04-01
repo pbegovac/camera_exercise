@@ -46,23 +46,19 @@ export const CursorWrapper = styled.div`
 `;
 
 const BaseCursorButton = styled.button`
-  width: 5rem;
-  height: 5rem;
-  background: url("../icons/arrow.svg") no-repeat;
-  background-size: contain;
-  background-color: transparent;
+  font-size: 2rem;
   border: none;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 `;
 
 export const CursorButtonRight = styled(BaseCursorButton)`
-  transform: rotate(90deg);
-  background-position: right;
+  justify-content: flex-end;
 `;
 
 export const CursorButtonLeft = styled(BaseCursorButton)`
-  transform: rotate(270deg);
-  background-position: left;
+  justify-content: flex-start;
 `;
 
 export const NumberButton = styled.button`
